@@ -187,10 +187,11 @@ export default function OrderTable() {
     }
 
     function onUpdateOrder(data: UpdateOrderResType['data']) {
-      const {
-        dishSnapshot: { name },
-        quantity
-      } = data
+      // Một số trường hợp data.dishSnapshot có thể bị null/undefined (do dữ liệu cũ hoặc lỗi backend),
+      // nên cần kiểm tra cẩn thận trước khi destructuring để tránh crash toàn bộ trang.
+      const name = data.dishSnapshot?.name || 'Món ăn'
+      const quantity = data.quantity || 0
+
       toast({
         description: `Món ${name} (SL: ${quantity}) vừa được cập nhật sang trạng thái "${getVietnameseOrderStatus(
           data.status

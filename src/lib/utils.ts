@@ -13,6 +13,7 @@ import { format } from 'date-fns'
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import { io } from 'socket.io-client'
 import slugify from 'slugify'
+import Cookies from 'js-cookie'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -57,14 +58,29 @@ export const getAccessTokenFromLocalStorage = () =>
 
 export const getRefreshTokenFromLocalStorage = () =>
   isBrowser ? localStorage.getItem('refreshToken') : null
-export const setAccessTokenToLocalStorage = (value: string) =>
-  isBrowser && localStorage.setItem('accessToken', value)
+export const setAccessTokenToLocalStorage = (value: string) => {
+  if (isBrowser) {
+    localStorage.setItem('accessToken', value)
+    // Lưu vào cookies để middleware có thể đọc được
+    Cookies.set('accessToken', value, { expires: 7, sameSite: 'lax' })
+  }
+}
 
-export const setRefreshTokenToLocalStorage = (value: string) =>
-  isBrowser && localStorage.setItem('refreshToken', value)
+export const setRefreshTokenToLocalStorage = (value: string) => {
+  if (isBrowser) {
+    localStorage.setItem('refreshToken', value)
+    // Lưu vào cookies để middleware có thể đọc được
+    Cookies.set('refreshToken', value, { expires: 7, sameSite: 'lax' })
+  }
+}
 export const removeTokensFromLocalStorage = () => {
-  isBrowser && localStorage.removeItem('accessToken')
-  isBrowser && localStorage.removeItem('refreshToken')
+  if (isBrowser) {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    // Xóa cả cookies
+    Cookies.remove('accessToken')
+    Cookies.remove('refreshToken')
+  }
 }
 export const checkAndRefreshToken = async (param?: {
   onError?: () => void
