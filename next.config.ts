@@ -19,6 +19,8 @@ const getBackendHostname = () => {
 const backendHostname = getBackendHostname()
 
 const nextConfig: NextConfig = {
+  // Ensure proper output for Vercel
+  output: undefined, // Let Vercel auto-detect
   images: {
     remotePatterns: [
       {
