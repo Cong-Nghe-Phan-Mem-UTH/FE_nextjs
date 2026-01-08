@@ -15,17 +15,29 @@ const configProject = configSchema.safeParse({
     process.env.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI
 })
 
+// Don't throw error on import - use fallback values instead
+// This allows the app to start even if env vars are missing
+let envConfig: z.infer<typeof configSchema>
+
 if (!configProject.success) {
   const missingVars = configProject.error.errors
     .map((err) => `${err.path.join('.')}: ${err.message}`)
     .join(', ')
-  console.error('❌ Environment Variables Error:', configProject.error.errors)
-  throw new Error(
-    `Các khai báo biến môi trường không hợp lệ. Thiếu hoặc sai: ${missingVars}. Vui lòng kiểm tra Vercel Dashboard → Settings → Environment Variables.`
+  console.error('⚠️ Environment Variables Warning:', configProject.error.errors)
+  console.warn(
+    `Missing or invalid env vars: ${missingVars}. Using fallback values. Please check Vercel Dashboard → Settings → Environment Variables.`
   )
+  // Use fallback values to allow app to start
+  envConfig = {
+    NEXT_PUBLIC_API_ENDPOINT: process.env.NEXT_PUBLIC_API_ENDPOINT || '',
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || '',
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI:
+      process.env.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI
+  }
+} else {
+  envConfig = configProject.data
 }
-
-const envConfig = configProject.data
 
 export default envConfig
 
