@@ -28,10 +28,14 @@ import SearchParamsLoader, {
 import { LoaderCircle } from 'lucide-react'
 
 const getOauthGoogleUrl = () => {
+  if (
+    !envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+    !envConfig.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI
+  ) {
+    return null
+  }
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
-  const options = {
-    redirect_uri: envConfig.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI,
-    client_id: envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+  const options: Record<string, string> = {
     access_type: 'offline',
     response_type: 'code',
     prompt: 'consent',
@@ -40,6 +44,15 @@ const getOauthGoogleUrl = () => {
       'https://www.googleapis.com/auth/userinfo.email'
     ].join(' ')
   }
+  
+  // Only add optional fields if they are defined
+  if (envConfig.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI) {
+    options.redirect_uri = envConfig.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI
+  }
+  if (envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+    options.client_id = envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+  }
+  
   const qs = new URLSearchParams(options)
   return `${rootUrl}?${qs.toString()}`
 }
@@ -154,11 +167,13 @@ export default function LoginForm() {
                 )}
                 {t('buttonLogin')}
               </Button>
-              <Link href={googleOauthUrl}>
-                <Button variant='outline' className='w-full' type='button'>
-                  {t('loginWithGoogle')}
-                </Button>
-              </Link>
+              {googleOauthUrl && (
+                <Link href={googleOauthUrl}>
+                  <Button variant='outline' className='w-full' type='button'>
+                    {t('loginWithGoogle')}
+                  </Button>
+                </Link>
+              )}
             </div>
           </form>
         </Form>

@@ -1,14 +1,14 @@
 import { Role } from '@/constants/type'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import jwt from 'jsonwebtoken'
+import { jwtDecode } from 'jwt-decode'
 import { TokenPayload } from '@/types/jwt.types'
 import createMiddleware from 'next-intl/middleware'
 import { defaultLocale } from '@/constants/locale'
 import { routing } from './i18n/routing'
 
 const decodeToken = (token: string) => {
-  return jwt.decode(token) as TokenPayload
+  return jwtDecode<TokenPayload>(token)
 }
 
 const managePaths = ['/vi/manage', '/en/manage']
