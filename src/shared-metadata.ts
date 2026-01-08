@@ -1,4 +1,7 @@
-import envConfig from '@/config'
+// Use process.env directly to avoid config dependency
+const getPublicUrl = () => {
+  return process.env.NEXT_PUBLIC_URL || ''
+}
 
 export const baseOpenGraph = {
   locale: 'en_US',
@@ -7,7 +10,7 @@ export const baseOpenGraph = {
   siteName: 'Bigboy Restaurant',
   images: [
     {
-      url: `${envConfig.NEXT_PUBLIC_URL}/banner.png`
+      url: `${getPublicUrl()}/banner.png`
     }
   ]
 }

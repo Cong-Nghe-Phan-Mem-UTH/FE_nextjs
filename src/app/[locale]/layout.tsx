@@ -10,7 +10,7 @@ import {
   getTranslations,
   setRequestLocale
 } from 'next-intl/server'
-import { Locale } from '@/config'
+import { Locale } from '@/constants/locale'
 import NextTopLoader from 'nextjs-toploader'
 import Footer from '@/components/footer'
 import { baseOpenGraph } from '@/shared-metadata'

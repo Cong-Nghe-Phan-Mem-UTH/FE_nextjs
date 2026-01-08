@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { TokenPayload } from '@/types/jwt.types'
 import createMiddleware from 'next-intl/middleware'
-import { defaultLocale } from '@/config'
+import { defaultLocale } from '@/constants/locale'
 import { routing } from './i18n/routing'
 
 const decodeToken = (token: string) => {
