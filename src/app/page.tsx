@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
+import { defaultLocale } from '@/constants/locale'
 
 export default function RootPage() {
-  // Default locale is 'vi' - hardcode to avoid config dependency
-  redirect('/vi')
+  // Permanent redirect to default locale
+  redirect(`/${defaultLocale}`)
 }
 
