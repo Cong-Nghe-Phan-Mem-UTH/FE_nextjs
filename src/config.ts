@@ -42,5 +42,5 @@ if (!configProject.success) {
 export default envConfig
 
 // Re-export locale types for backward compatibility
-export type { Locale, locales, defaultLocale } from '@/constants/locale'
+export type { Locale } from '@/constants/locale'
 export { locales, defaultLocale } from '@/constants/locale'
