@@ -120,9 +120,9 @@ export function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    // Match all pathnames except for
-    // - … if they start with `/api`, `/_next` or `/_vercel`
-    // - … the ones containing a dot (e.g. `favicon.ico`)
-    '/((?!api|_next|_vercel|.*\\..*).*)'
+    // Enable a redirect to a matching locale at the root
+    '/',
+    // Enable locale prefix matching for all paths
+    '/(vi|en)/:path*'
   ]
 }
