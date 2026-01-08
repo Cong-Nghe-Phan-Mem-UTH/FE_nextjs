@@ -3,8 +3,8 @@ import { z } from 'zod'
 const configSchema = z.object({
   NEXT_PUBLIC_API_ENDPOINT: z.string(),
   NEXT_PUBLIC_URL: z.string(),
-  NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string(),
-  NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI: z.string()
+  NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().optional(),
+  NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI: z.string().optional()
 })
 
 const configProject = configSchema.safeParse({
@@ -16,8 +16,13 @@ const configProject = configSchema.safeParse({
 })
 
 if (!configProject.success) {
-  console.error(configProject.error.errors)
-  throw new Error('Các khai báo biến môi trường không hợp lệ')
+  const missingVars = configProject.error.errors
+    .map((err) => `${err.path.join('.')}: ${err.message}`)
+    .join(', ')
+  console.error('❌ Environment Variables Error:', configProject.error.errors)
+  throw new Error(
+    `Các khai báo biến môi trường không hợp lệ. Thiếu hoặc sai: ${missingVars}. Vui lòng kiểm tra Vercel Dashboard → Settings → Environment Variables.`
+  )
 }
 
 const envConfig = configProject.data
