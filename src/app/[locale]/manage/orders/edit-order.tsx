@@ -73,15 +73,15 @@ export default function EditOrder({
     if (data) {
       const {
         status,
-        dishSnapshot: { dishId },
+        dishSnapshot,
         quantity
       } = data.payload.data
       form.reset({
         status,
-        dishId: dishId ?? 0,
+        dishId: dishSnapshot?.dishId ?? 0,
         quantity
       })
-      setSelectedDish(data.payload.data.dishSnapshot)
+      setSelectedDish(dishSnapshot || null)
     }
   }, [data, form])
 

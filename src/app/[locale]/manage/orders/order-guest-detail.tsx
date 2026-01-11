@@ -75,6 +75,41 @@ export default function OrderGuestDetail({
       <div className='space-y-1'>
         <div className='font-semibold'>Đơn hàng:</div>
         {orders.map((order, index) => {
+          const dishSnapshot = order.dishSnapshot
+          if (!dishSnapshot) {
+            return (
+              <div key={order.id} className='flex gap-2 items-center text-xs'>
+                <span className='w-[10px]'>{index + 1}</span>
+                <span title={getVietnameseOrderStatus(order.status)}>
+                  {order.status === OrderStatus.Pending && (
+                    <OrderStatusIcon.Pending className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Processing && (
+                    <OrderStatusIcon.Processing className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Rejected && (
+                    <OrderStatusIcon.Rejected className='w-4 h-4 text-red-400' />
+                  )}
+                  {order.status === OrderStatus.Delivered && (
+                    <OrderStatusIcon.Delivered className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Paid && (
+                    <OrderStatusIcon.Paid className='w-4 h-4 text-yellow-400' />
+                  )}
+                </span>
+                <div className='h-[30px] w-[30px] rounded bg-gray-200 flex items-center justify-center text-[8px]'>
+                  N/A
+                </div>
+                <span className='truncate w-[70px] sm:w-[100px]' title='Món đã bị xóa'>
+                  Món đã bị xóa
+                </span>
+                <span className='font-semibold' title={`Tổng: ${order.quantity}`}>
+                  x{order.quantity}
+                </span>
+                <span className='italic'>{formatCurrency(0)}</span>
+              </div>
+            )
+          }
           return (
             <div key={order.id} className='flex gap-2 items-center text-xs'>
               <span className='w-[10px]'>{index + 1}</span>
@@ -96,24 +131,24 @@ export default function OrderGuestDetail({
                 )}
               </span>
               <Image
-                src={order.dishSnapshot.image}
-                alt={order.dishSnapshot.name}
-                title={order.dishSnapshot.name}
+                src={dishSnapshot.image || ''}
+                alt={dishSnapshot.name || 'Món ăn'}
+                title={dishSnapshot.name || 'Món ăn'}
                 width={30}
                 height={30}
                 className='h-[30px] w-[30px] rounded object-cover'
               />
               <span
                 className='truncate w-[70px] sm:w-[100px]'
-                title={order.dishSnapshot.name}
+                title={dishSnapshot.name || 'Món ăn'}
               >
-                {order.dishSnapshot.name}
+                {dishSnapshot.name || 'Món ăn'}
               </span>
               <span className='font-semibold' title={`Tổng: ${order.quantity}`}>
                 x{order.quantity}
               </span>
               <span className='italic'>
-                {formatCurrency(order.quantity * order.dishSnapshot.price)}
+                {formatCurrency(order.quantity * (dishSnapshot.price || 0))}
               </span>
               <span
                 className='hidden sm:inline'
@@ -144,7 +179,7 @@ export default function OrderGuestDetail({
           <span>
             {formatCurrency(
               ordersFilterToPurchase.reduce((acc, order) => {
-                return acc + order.quantity * order.dishSnapshot.price
+                return acc + order.quantity * (order.dishSnapshot?.price || 0)
               }, 0)
             )}
           </span>
@@ -156,7 +191,7 @@ export default function OrderGuestDetail({
           <span>
             {formatCurrency(
               purchasedOrderFilter.reduce((acc, order) => {
-                return acc + order.quantity * order.dishSnapshot.price
+                return acc + order.quantity * (order.dishSnapshot?.price || 0)
               }, 0)
             )}
           </span>
