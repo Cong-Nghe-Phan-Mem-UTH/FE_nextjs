@@ -22,7 +22,11 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
+import {
+  getVietnameseDishCategory,
+  getVietnameseDishStatus,
+  handleErrorApi
+} from '@/lib/utils'
 import {
   Select,
   SelectContent,
@@ -34,7 +38,11 @@ import {
   UpdateDishBody,
   UpdateDishBodyType
 } from '@/schemaValidations/dish.schema'
-import { DishStatus, DishStatusValues } from '@/constants/type'
+import {
+  DishCategoryValues,
+  DishStatus,
+  DishStatusValues
+} from '@/constants/type'
 import { Textarea } from '@/components/ui/textarea'
 import { useUploadMediaMutation } from '@/queries/useMedia'
 import { useGetDishQuery, useUpdateDishMutation } from '@/queries/useDish'
@@ -62,7 +70,8 @@ export default function EditDish({
       description: '',
       price: 0,
       image: undefined,
-      status: DishStatus.Unavailable
+      status: DishStatus.Unavailable,
+      category: undefined
     }
   })
   const image = form.watch('image')
@@ -77,13 +86,15 @@ export default function EditDish({
 
   useEffect(() => {
     if (data) {
-      const { name, image, description, price, status } = data.payload.data
+      const { name, image, description, price, status, category } =
+        data.payload.data
       form.reset({
         name,
         image: image ?? undefined,
         description,
         price,
-        status
+        status,
+        category: category ?? undefined
       })
     }
   }, [data, form])
@@ -271,6 +282,37 @@ export default function EditDish({
                       </div>
 
                       <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='category'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-4 items-center justify-items-start gap-4'>
+                      <Label htmlFor='category'>Loại món</Label>
+                      <div className='col-span-3 w-full space-y-2'>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ''}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder='Chọn loại (tùy chọn)' />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {DishCategoryValues.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                {getVietnameseDishCategory(cat)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </div>
                     </div>
                   </FormItem>
                 )}

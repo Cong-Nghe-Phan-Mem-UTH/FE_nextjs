@@ -5,7 +5,13 @@ import { UseFormSetError } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { jwtDecode } from 'jwt-decode'
 import authApiRequest from '@/apiRequests/auth'
-import { DishStatus, OrderStatus, Role, TableStatus } from '@/constants/type'
+import {
+  DishCategory,
+  DishStatus,
+  OrderStatus,
+  Role,
+  TableStatus
+} from '@/constants/type'
 import envConfig, { defaultLocale } from '@/config'
 import { TokenPayload } from '@/types/jwt.types'
 import guestApiRequest from '@/apiRequests/guest'
@@ -146,6 +152,21 @@ export const getVietnameseDishStatus = (
       return 'Không có sẵn'
     default:
       return 'Ẩn'
+  }
+}
+
+export const getVietnameseDishCategory = (
+  category: (typeof DishCategory)[keyof typeof DishCategory]
+) => {
+  switch (category) {
+    case DishCategory.Main:
+      return 'Ăn chính'
+    case DishCategory.Side:
+      return 'Ăn phụ'
+    case DishCategory.Drink:
+      return 'Đồ uống'
+    default:
+      return 'Khác'
   }
 }
 

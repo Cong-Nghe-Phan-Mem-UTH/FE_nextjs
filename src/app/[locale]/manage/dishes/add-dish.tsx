@@ -22,12 +22,21 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
+import {
+  getVietnameseDishCategory,
+  getVietnameseDishStatus,
+  handleErrorApi
+} from '@/lib/utils'
 import {
   CreateDishBody,
   CreateDishBodyType
 } from '@/schemaValidations/dish.schema'
-import { DishStatus, DishStatusValues } from '@/constants/type'
+import {
+  DishCategory,
+  DishCategoryValues,
+  DishStatus,
+  DishStatusValues
+} from '@/constants/type'
 import {
   Select,
   SelectContent,
@@ -54,7 +63,8 @@ export default function AddDish() {
       description: '',
       price: 0,
       image: undefined,
-      status: DishStatus.Unavailable
+      status: DishStatus.Unavailable,
+      category: undefined
     }
   })
   const image = form.watch('image')
@@ -252,6 +262,37 @@ export default function AddDish() {
                       </div>
 
                       <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='category'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-4 items-center justify-items-start gap-4'>
+                      <Label htmlFor='category'>Loại món</Label>
+                      <div className='col-span-3 w-full space-y-2'>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ''}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder='Chọn loại (tùy chọn)' />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {DishCategoryValues.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                {getVietnameseDishCategory(cat)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </div>
                     </div>
                   </FormItem>
                 )}

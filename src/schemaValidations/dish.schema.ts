@@ -1,4 +1,4 @@
-import { DishStatusValues } from '@/constants/type'
+import { DishCategoryValues, DishStatusValues } from '@/constants/type'
 import z from 'zod'
 
 export const CreateDishBody = z.object({
@@ -6,7 +6,8 @@ export const CreateDishBody = z.object({
   price: z.coerce.number().positive(),
   description: z.string().max(10000),
   image: z.string().url().optional().or(z.literal('')),
-  status: z.enum(DishStatusValues).optional()
+  status: z.enum(DishStatusValues).optional(),
+  category: z.enum(DishCategoryValues).optional()
 })
 
 export type CreateDishBodyType = z.TypeOf<typeof CreateDishBody>
@@ -18,6 +19,7 @@ export const DishSchema = z.object({
   description: z.string(),
   image: z.string(),
   status: z.enum(DishStatusValues),
+  category: z.enum(DishCategoryValues).optional(),
   createdAt: z.date(),
   updatedAt: z.date()
 })

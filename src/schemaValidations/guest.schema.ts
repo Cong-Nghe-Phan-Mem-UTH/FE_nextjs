@@ -33,7 +33,8 @@ export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>
 export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
-    quantity: z.number()
+    quantity: z.number(),
+    note: z.string().max(500).optional()
   })
 )
 
