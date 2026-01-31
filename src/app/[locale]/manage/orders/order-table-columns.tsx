@@ -145,6 +145,12 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
                     {formatCurrency(dishSnapshot.price || 0)}
                   </div>
                   <div>{dishSnapshot.description || ''}</div>
+                  {row.original.note && (
+                    <div className='text-muted-foreground pt-1 border-t'>
+                      <span className='font-medium'>Ghi chú: </span>
+                      {row.original.note}
+                    </div>
+                  )}
                 </div>
               </div>
             </PopoverContent>
@@ -162,6 +168,11 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
                 (dishSnapshot.price || 0) * row.original.quantity
               )}
             </span>
+            {row.original.note && (
+              <div className='text-xs text-muted-foreground'>
+                Ghi chú: {row.original.note}
+              </div>
+            )}
           </div>
         </div>
       )

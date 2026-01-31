@@ -30,6 +30,7 @@ export const OrderSchema = z.object({
   dishSnapshotId: z.number(),
   dishSnapshot: DishSnapshotSchema,
   quantity: z.number(),
+  note: z.string().optional(),
   orderHandlerId: z.number().nullable(),
   orderHandler: AccountSchema.nullable(),
   status: z.enum(OrderStatusValues),

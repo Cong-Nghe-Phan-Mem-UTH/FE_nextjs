@@ -111,63 +111,71 @@ export default function OrderGuestDetail({
             )
           }
           return (
-            <div key={order.id} className='flex gap-2 items-center text-xs'>
-              <span className='w-[10px]'>{index + 1}</span>
-              <span title={getVietnameseOrderStatus(order.status)}>
-                {order.status === OrderStatus.Pending && (
-                  <OrderStatusIcon.Pending className='w-4 h-4' />
-                )}
-                {order.status === OrderStatus.Processing && (
-                  <OrderStatusIcon.Processing className='w-4 h-4' />
-                )}
-                {order.status === OrderStatus.Rejected && (
-                  <OrderStatusIcon.Rejected className='w-4 h-4 text-red-400' />
-                )}
-                {order.status === OrderStatus.Delivered && (
-                  <OrderStatusIcon.Delivered className='w-4 h-4' />
-                )}
-                {order.status === OrderStatus.Paid && (
-                  <OrderStatusIcon.Paid className='w-4 h-4 text-yellow-400' />
-                )}
-              </span>
-              <Image
-                src={dishSnapshot.image || ''}
-                alt={dishSnapshot.name || 'Món ăn'}
-                title={dishSnapshot.name || 'Món ăn'}
-                width={30}
-                height={30}
-                className='h-[30px] w-[30px] rounded object-cover'
-              />
-              <span
-                className='truncate w-[70px] sm:w-[100px]'
-                title={dishSnapshot.name || 'Món ăn'}
-              >
-                {dishSnapshot.name || 'Món ăn'}
-              </span>
-              <span className='font-semibold' title={`Tổng: ${order.quantity}`}>
-                x{order.quantity}
-              </span>
-              <span className='italic'>
-                {formatCurrency(order.quantity * (dishSnapshot.price || 0))}
-              </span>
-              <span
-                className='hidden sm:inline'
-                title={`Tạo: ${formatDateTimeToLocaleString(
-                  order.createdAt
-                )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
+            <div key={order.id} className='space-y-0.5'>
+              <div className='flex gap-2 items-center text-xs'>
+                <span className='w-[10px]'>{index + 1}</span>
+                <span title={getVietnameseOrderStatus(order.status)}>
+                  {order.status === OrderStatus.Pending && (
+                    <OrderStatusIcon.Pending className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Processing && (
+                    <OrderStatusIcon.Processing className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Rejected && (
+                    <OrderStatusIcon.Rejected className='w-4 h-4 text-red-400' />
+                  )}
+                  {order.status === OrderStatus.Delivered && (
+                    <OrderStatusIcon.Delivered className='w-4 h-4' />
+                  )}
+                  {order.status === OrderStatus.Paid && (
+                    <OrderStatusIcon.Paid className='w-4 h-4 text-yellow-400' />
+                  )}
+                </span>
+                <Image
+                  src={dishSnapshot.image || ''}
+                  alt={dishSnapshot.name || 'Món ăn'}
+                  title={dishSnapshot.name || 'Món ăn'}
+                  width={30}
+                  height={30}
+                  className='h-[30px] w-[30px] rounded object-cover'
+                />
+                <span
+                  className='truncate w-[70px] sm:w-[100px]'
+                  title={dishSnapshot.name || 'Món ăn'}
+                >
+                  {dishSnapshot.name || 'Món ăn'}
+                </span>
+                <span className='font-semibold' title={`Tổng: ${order.quantity}`}>
+                  x{order.quantity}
+                </span>
+                <span className='italic'>
+                  {formatCurrency(order.quantity * (dishSnapshot.price || 0))}
+                </span>
+                <span
+                  className='hidden sm:inline'
+                  title={`Tạo: ${formatDateTimeToLocaleString(
+                    order.createdAt
+                  )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
           `}
-              >
-                {formatDateTimeToLocaleString(order.createdAt)}
-              </span>
-              <span
-                className='sm:hidden'
-                title={`Tạo: ${formatDateTimeToLocaleString(
-                  order.createdAt
-                )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
+                >
+                  {formatDateTimeToLocaleString(order.createdAt)}
+                </span>
+                <span
+                  className='sm:hidden'
+                  title={`Tạo: ${formatDateTimeToLocaleString(
+                    order.createdAt
+                  )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
           `}
-              >
-                {formatDateTimeToTimeString(order.createdAt)}
-              </span>
+                >
+                  {formatDateTimeToTimeString(order.createdAt)}
+                </span>
+              </div>
+              {order.note && (
+                <div className='text-xs text-muted-foreground pl-[26px]'>
+                  <span className='font-medium'>Ghi chú: </span>
+                  {order.note}
+                </div>
+              )}
             </div>
           )
         })}
